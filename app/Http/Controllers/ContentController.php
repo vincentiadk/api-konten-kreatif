@@ -39,7 +39,8 @@ class ContentController extends Controller
             $q_vall .= "q=" . request('q');
         }
         if("null" !==request('sub-class')){
-            $query .= " AND subject_sub_class:" . request('sub-class');
+            $query .= " AND subject_sub_class:" . request('sub-class') . "&sort=field('prob_subject_sub_class')+desc";
+            
             $q_vall .= "&sub-class=" . request('sub-class');
         }
         if("null" !==request('page')){
@@ -83,7 +84,8 @@ class ContentController extends Controller
             [
                 "query" => $q_vall,
                 "total_results" => $numFound,
-                "length" => count($docs),
+                "length" => $length,
+                "rows" => count($docs),
                 "page" => request('page') == 'null' ? 1 : request('page'),
                 "results" => $res,
                 
