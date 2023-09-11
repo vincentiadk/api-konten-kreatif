@@ -72,7 +72,7 @@ class ContentController extends Controller
             }
             array_push($res,[
                 'id' => $doc['id'],
-                'title' => $doc['title'][0],
+                'title' => isset($doc['title'][0]) ? $doc['title'][0] : "",
                 'creator' => isset($doc['creator_string']) ? $doc['creator_string'][0] : '',
                 'description' => isset($doc['description']) ? $doc['description'][0] : '',
                 'type' => $type, //isset($doc['type'])? $doc['type'][0] : 'article',
@@ -145,7 +145,6 @@ class ContentController extends Controller
     {
         $data = $this->process_csv('klasifikasi-ddc.csv');
         $class = substr($sub_class, 0 ,1) . "xx";
-        \Log::info($class);
         $nama_class = "";
         foreach($data as $d){
             if(strtolower($d[0]) == $class){
