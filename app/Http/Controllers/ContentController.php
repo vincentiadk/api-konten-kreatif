@@ -13,6 +13,7 @@ class ContentController extends Controller
      */
     public $client;
     public $solr_url;
+    public $query;
 
     public function __construct()
     {
@@ -24,13 +25,30 @@ class ContentController extends Controller
         ]);
     
         $this->solr_url = env('SOLR_URL');
+        $this->query = "/select?q=system_name:pkw AND table_name:records AND publisher:(Youtube or creativecontent) ";
     }
 
     public function search()
     {
-        $page = request('page') ? intval(request('page')) - 1 : 0;
-        $length = request('length') ? intval(request('length'))  : 10;
-        $query = "/select?q=system_name:pkw AND table_name:records AND publisher:(Youtube or creativecontent) AND title:*" . request('q') ."* OR description:*". request('q') ."*";
+        $page = request('page') && request('page') != "null" ? intval(request('page')) - 1 : 0;
+        $length = request('length') && request('length') != "null"? intval(request('length'))  : 10;
+        $query = $this->query;
+        $q_vall = "";
+        if("null" !==request('q')){
+            $query .= ' AND title:' . request('q') .' OR description:'. request('q');
+            $q_vall .= "q=" . request('q');
+        }
+        if("null" !==request('sub-class')){
+            $query .= " AND subject_sub_class:" . request('sub-class');
+            $q_vall .= "&sub-class=" . request('sub-class');
+        }
+        if("null" !==request('page')){
+            $q_vall .= "&page=" . request('page');
+        }
+        if("null" !==request('length')){
+            $q_vall .= "&length=" . request('length');
+        }
+
         $query .= "&start=" . $page*$length . "&rows=$length";
         $response = $this->client->get($this->solr_url. $query);
         $content = $response->getBody()->getContents();
@@ -39,24 +57,34 @@ class ContentController extends Controller
         $numFound = $content["numFound"];
         $res = [];
         foreach($docs as $doc){
+            $type = "";
+            if(!isset($doc['type']) && (strpos(strtolower($doc['download_original']), "youtube") !== false)){
+                $type = "video";
+            } else if(strpos($doc['download_original'], "journal") !== false) {
+                $type = "article";
+            } else {
+                $type = $doc['type'][0];
+            }
             array_push($res,[
                 'id' => $doc['id'],
                 'title' => $doc['title'][0],
+                'creator' => isset($doc['creator_string']) ? $doc['creator_string'][0] : '',
                 'description' => isset($doc['description']) ? $doc['description'][0] : '',
-                'type' => isset($doc['type'])? $doc['type'][0] : 'article',
+                'type' => $type, //isset($doc['type'])? $doc['type'][0] : 'article',
                 'link' => isset($doc['download_original']) ? $doc['download_original'] : '',
                 'subject_class' => isset($doc['subject_class']) ? $doc['subject_class'][0] : '',
                 'prob_subject_class' => isset($doc['prob_subject_class']) ? $doc['prob_subject_class'][0] : '',
                 'subject_sub_class' => isset($doc['subject_sub_class']) ? $doc['subject_sub_class'][0] : '',
                 'prob_subject_sub_class' => isset($doc['prob_subject_sub_class']) ? $doc['prob_subject_sub_class'][0] : '',
+                'created_at' => isset($doc['created_at']) ? substr($doc['created_at'], 0, 10) : '',
             ]);
         }
         return response()->json(
             [
-                "query" => request('q'),
+                "query" => $q_vall,
                 "total_results" => $numFound,
                 "length" => count($docs),
-                "page" => request('page') ? request('page') : 1,
+                "page" => request('page') == 'null' ? 1 : request('page'),
                 "results" => $res,
                 
             ]

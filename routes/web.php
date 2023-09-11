@@ -18,7 +18,8 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/statistic/class', 'StatisticController@getClass');
-$router->get('/statistic/sub-class/{class}', 'StatisticController@getSubClass');
+$router->get('/statistic/sub-class', 'StatisticController@getSubClass');
+$router->get('/statistic/sub-class-all', 'StatisticController@getSubClassAll');
 $router->get('/statistic/unit', 'StatisticController@getUnit');
 $router->get('/statistic/date', 'StatisticController@getDate');
 

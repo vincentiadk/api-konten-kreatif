@@ -46,9 +46,15 @@ class StatisticController extends Controller
         return response()->json($content);
     }
 
-    public function getSubClass($class)
-    {        
-        $query = "$this->query AND subject_class:$class&facet=true&facet.field=subject_sub_class&facet.mincount=1&facet.sort=index&rows=0&json.nl=arrmap" ;
+    public function getSubClass()
+    {   
+        $query = $this->query;
+        $class = trim(request('class'));
+        if(null !==request('class')){
+            $query .= " AND subject_class:" . $class;
+        }
+
+        $query .= "&facet=true&facet.field=subject_sub_class&facet.mincount=1&facet.sort=index&rows=0&json.nl=arrmap" ;
         $response = $this->client->get($this->solr_url. $query);
         $content = $response->getBody()->getContents();
         $content = json_decode($content, true)["facet_counts"]["facet_fields"]["subject_sub_class"];
@@ -56,19 +62,64 @@ class StatisticController extends Controller
         $content0 = [];       
         foreach($content as $cont){
             $key = key($cont);
-            $key_ = substr($class, 0, 1) . substr(key($cont), 0, 2); 
-            $val = $cont[$key];
+            if($class == "0xx"){
+                $key_ = substr($class, 0, 1) . substr(key($cont), 0, 2); 
+                $val = $cont[$key];
 
-            if(array_key_exists($key_, $content0)){
-                $content0[$key_] = $content0[$key_] + $val;
+                if(array_key_exists($key_, $content0)){
+                    $content0[$key_] = $content0[$key_] + $val;
+                } else {
+                    $content0[$key_] = $cont[$key];
+                }
             } else {
-                $content0 = array_merge($content0,[
-                    $key_ => $val
-                ]);
+                if(strlen($key) > 3){
+                    $key_ = substr($key, 0, 2) . "0";
+                    if(array_key_exists($key_, $content0)){
+                        $content0[$key_] = intval($content0[$key_]) + $cont[$key];
+                    } else {
+                        $content0[$key_] = $cont[$key];
+                    }
+                } else {
+                    $content0[$key] = $cont[$key];
+                }
             }
         }
         $content = $content0;
         return response()->json($content);
+    }
+
+    public function getSubClassAll()
+    {   
+        $query = $this->query;
+        $query .= "&facet=true&facet.field=subject_sub_class&facet.mincount=1&facet.sort=index&rows=0&json.nl=arrmap" ;
+        $response = $this->client->get($this->solr_url. $query);
+        $content = $response->getBody()->getContents();
+        $content = json_decode($content, true)["facet_counts"]["facet_fields"]["subject_sub_class"];
+        
+        $content0 = [];       
+        foreach($content as $cont){
+            $key = key($cont);
+            if(strlen($key) < 3){
+                $key_ = "0" . substr(key($cont), 0, 2); 
+                $val = $cont[$key];
+                if(array_key_exists($key_, $content0)){
+                    $content0[$key_] = $content0[$key_] + $val;
+                } else {
+                    $content0[$key_] = $cont[$key];
+                }
+            } else if(strlen($key) > 3){
+                    $key_ = substr($key, 0, 2) . "0";
+                    if(array_key_exists($key_, $content0)){
+                        $content0[$key_] = intval($content0[$key_]) + $cont[$key];
+                    } else {
+                        $content0[$key_] = $cont[$key];
+                    }
+            } else {
+                $content0[$key] = $cont[$key];
+            }
+        }
+        //$content = $content0;
+        return response()->json($content0);
     }
 
     public function getUnit()
@@ -136,5 +187,7 @@ class StatisticController extends Controller
 		}
 		return $row;
     }
+
+    
 
 }
