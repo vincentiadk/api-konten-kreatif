@@ -6,7 +6,7 @@
 050;Terbitan berseri umum
 060;Organisasi umum dan museologi
 070;"Media dokumenter, pendidikan, berita; jurnalisme; penerbitan"
-080 ;Koleksi umum
+080;Koleksi umum
 090;Manuskrip, buku langka, materi tercetak langka lainnya
 1XX;Filsafat dan Psikologi
 100;Filsafat dan Psikologi
@@ -55,7 +55,7 @@
 5XX;Sains
 500;Ilmu pengetahuan alam dan matematika 
 510;Matematika
-520 ;Astromoni dan ilmu-ilmu berhubungan (bumi, mekanika langit, teknik, prosedur, benda langit, navigasi langit, geografi matematis)
+520;Astromoni dan ilmu-ilmu berhubungan (bumi, mekanika langit, teknik, prosedur, benda langit, navigasi langit, geografi matematis)
 530;Fisika
 540;Kimia dan ilmu berkaitan (Mineralogi, Kimia anorganik, kimia organik, kimia fisik, kimia analitis, dll)
 550;Ilmu kebumian
@@ -78,7 +78,7 @@
 700;"Kesenian; Seni rupa dan dekorasi"
 710;Seni perkotaan dan lanskap
 720;Arsitektur
-730 ;"Seni plastik; Patung"
+730;"Seni plastik; Patung"
 740;Seni menggambar dan dekorasi
 750;Melukis dan lukisan
 760;"Seni grafis; Pencetakan dan cetakan"

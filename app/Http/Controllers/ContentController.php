@@ -40,7 +40,6 @@ class ContentController extends Controller
             $q_vall .= "q=" . request('q');
         }
         if(null != request('id')){
-            \Log::info(request('id'));
             $query .= ' AND -id:' . request('id');
         }
         if("null" !==request('sub-class')){
@@ -60,7 +59,6 @@ class ContentController extends Controller
         }
 
         $query .= "&start=" . $page*$length . "&rows=$length";
-        \Log::info($query);
         $response = $this->client->get($this->solr_url. $query);
         $content = $response->getBody()->getContents();
         $content = json_decode($content, true)["response"];
