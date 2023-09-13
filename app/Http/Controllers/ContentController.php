@@ -160,6 +160,8 @@ class ContentController extends Controller
         foreach($data as $d){
             if(strtolower($d[0]) == $class){
                 $nama_class = $d[1];
+                return 
+                response()->json([ $nama_class , $nama_class]);
             }
             if($d[0] == $sub_class){
                 return 
