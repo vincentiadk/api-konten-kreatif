@@ -25,7 +25,7 @@ $router->get('/statistic/date', 'StatisticController@getDate');
 
 $router->get('/content/search', 'ContentController@search');
 $router->get('/content/detail/{id}', 'ContentController@detail');
-$router->get('/content/get-subclass-desc/{sub_class}', 'ContentController@getSubClassDesc');
+$router->get('/content/get-subclass-desc/{sub}', 'ContentController@getSubClassDesc');
 
 $router->get('/user/detail', 'UserController@detail');
 $router->get('/user/content', 'UserController@getContent');

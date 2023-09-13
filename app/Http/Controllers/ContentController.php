@@ -154,21 +154,34 @@ class ContentController extends Controller
         fclose($file);
         return $data;
     }
-    public function getSubClassDesc($sub_class)
+    public function getSubClassDesc($sub)
     {
         $data = $this->process_csv('klasifikasi-ddc.csv');
-        $class = substr($sub_class, 0 ,1) . "xx";
         $nama_class = "";
-        foreach($data as $d){
-            if(strtolower($d[0]) == $class){
-                $nama_class = $d[1];
-                return 
-                response()->json([ $nama_class , $nama_class]);
-            }
-            if($d[0] == $sub_class){
-                return 
-                response()->json([ $nama_class , $d[1]]);
-            }
-       }
+        $sub_class = "";
+        if(strpos(strtolower($sub), "xx") !== false) {
+            foreach($data as $d){
+                if($d){
+                    if(strtolower($d[0]) == $sub){
+                        $nama_class = $d[1];   
+                        return response()->json([ $nama_class , $nama_class ]);
+                    }
+                }
+           }
+        } else {
+            $class = substr($sub, 0 ,1) . "xx";
+            foreach($data as $d){
+                if($d) {
+                    if(strtolower($d[0]) == $class){
+                        $nama_class = $d[1];
+                    }
+                    if($d[0] == $sub){
+                        return 
+                        response()->json([ $nama_class , $d[1]]);
+                    }
+                }
+           }
+        }
+        
     }
 }
