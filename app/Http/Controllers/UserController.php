@@ -60,7 +60,7 @@ class UserController extends Controller
         );
     }
 
-    public function getKonten()
+    public function getContent()
     {
         $page = request('page') && request('page') != "null" ? intval(request('page')) - 1 : 0;
         $length = request('length') && request('length') != "null"? intval(request('length'))  : 5;

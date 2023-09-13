@@ -28,4 +28,4 @@ $router->get('/content/detail/{id}', 'ContentController@detail');
 $router->get('/content/get-subclass-desc/{sub_class}', 'ContentController@getSubClassDesc');
 
 $router->get('/user/detail', 'UserController@detail');
-$router->get('/user/konten', 'ContentController@getKonten');
+$router->get('/user/content', 'UserController@getContent');
