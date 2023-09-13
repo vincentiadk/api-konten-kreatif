@@ -45,8 +45,10 @@ class ContentController extends Controller
         if("null" !==request('class')){
             $subject_class = request('class');
             
-            $query .= " AND subject_class:" . $subject_class . "&sort=field('prob_subject_class')+desc";
-            
+            $query .= " AND subject_class:" . $subject_class;
+            if("null" ==request('sub-class')){
+                $query .="&sort=field('prob_subject_class')+desc";
+            }
             $q_vall .= "&class=" . request('class');
         }
         if("null" !==request('sub-class')){
