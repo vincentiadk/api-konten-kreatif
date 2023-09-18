@@ -78,7 +78,7 @@ class UserController extends Controller
             $q_vall .= "&length=" . request('length');
         }
 
-        $query .= "&start=" . $page*$length . "&rows=$length";
+        $query .= "&start=" . $page*$length . "&rows=$length&sort=field('date',max)+desc";
         $response = $this->client->get($this->solr_url. $query);
         $content = $response->getBody()->getContents();
         $content = json_decode($content, true)["response"];
@@ -105,7 +105,7 @@ class UserController extends Controller
                 'prob_subject_class' => isset($doc['prob_subject_class']) ? $doc['prob_subject_class'][0] : '',
                 'subject_sub_class' => isset($doc['subject_sub_class']) ? $doc['subject_sub_class'][0] : '',
                 'prob_subject_sub_class' => isset($doc['prob_subject_sub_class']) ? $doc['prob_subject_sub_class'][0] : '',
-                'created_at' => isset($doc['created_at']) ? substr($doc['created_at'], 0, 10) : '',
+                'created_at' => isset($doc['date']) ? substr($doc['date'][0], 0, 10) : '',
             ]);
         }
         return response()->json(
