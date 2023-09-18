@@ -176,6 +176,21 @@ class StatisticController extends Controller
                     $date_view = substr($key, 0, 10);
                 } else if($request->date_type == 'bulanan'){
                     $date_view = substr($key, 0, 7);
+                    switch(substr($date_view, 5, 7)){
+                        case '01' : $date_view = "Januari " . substr($date_view, 0, 4) ; break;
+                        case '02' : $date_view = "Februari " . substr($date_view, 0, 4); break;
+                        case '03' : $date_view = "Maret " . substr($date_view, 0, 4); break;
+                        case '04' : $date_view = "April " . substr($date_view, 0, 4); break;
+                        case '05' : $date_view = "Mei " . substr($date_view, 0, 4); break;
+                        case '06' : $date_view = "Juni " . substr($date_view, 0, 4); break;
+                        case  '07' : $date_view = "Juli " . substr($date_view, 0, 4); break;
+                        case '08' : $date_view = "Agustus " . substr($date_view, 0, 4); break;
+                        case  '09' : $date_view = "September " . substr($date_view, 0, 4); break;
+                        case  '10' : $date_view = "Oktober " . substr($date_view, 0, 4); break;
+                        case '11' : $date_view = "November " . substr($date_view, 0, 4); break;
+                        case '12' : $date_view = "Desember " . substr($date_view, 0, 4); break;
+                        default : break;
+                    }
                 } else if($request->date_type == 'tahunan'){
                     $date_view = substr($key, 0, 4);
                 } 
